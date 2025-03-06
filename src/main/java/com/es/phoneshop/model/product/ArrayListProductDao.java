@@ -50,7 +50,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public Product getProduct(Long id) {
+    public synchronized Product getProduct(Long id) {
         if (id == null) {
             throw new BadProductRequestException("Cannot search. Product ID is null");
         }
@@ -62,29 +62,33 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public List<Product> findProducts() {
+    public synchronized List<Product> findProducts() {
         List<Product> result = products.stream()
                 .filter(product -> BigDecimal.ZERO.compareTo(product.getPrice()) < 0)
                 .filter(product -> product.getStock() > 0)
                 .filter(product -> !product.getDescription().isEmpty())
                 .toList();
 
-        if (result.isEmpty()) {
-            throw new ProductNotFoundException("No products found");
-        }
-
-        return result;
+        return new ArrayList<>(result);
     }
 
     @Override
-    public void save(Product product) {
+    public synchronized void save(Product product) {
         Product productToUpdate;
-
+        if (product.getDescription().isEmpty()
+                || product.getPrice() == null
+                || product.getPrice().compareTo(BigDecimal.ZERO) < 0
+                || product.getStock() < 0
+                || product.getCode().isEmpty()
+                || product.getImageUrl().isEmpty()) {
+            throw new BadProductRequestException("");
+        }
         if ((product.getId() != null)
                 && (productToUpdate = products.stream()
                 .filter(listedProduct -> product.getId().equals(listedProduct.getId()))
                 .findFirst().orElse(null)) != null) {
             products.set(products.indexOf(productToUpdate), product);
+
         } else {
             product.setId(++currentProductId);
             products.add(product);
@@ -92,11 +96,10 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public void delete(Long id) {
+    public synchronized void delete(Long id) {
         if (id == null) {
             throw new BadProductRequestException("Cannot delete. Product ID is null");
         }
-
         boolean isRemoved = products.removeIf(product -> id.equals(product.getId()));
 
         if (!isRemoved) {

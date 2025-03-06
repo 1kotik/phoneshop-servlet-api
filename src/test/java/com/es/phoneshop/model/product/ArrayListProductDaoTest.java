@@ -34,11 +34,6 @@ class ArrayListProductDaoTest {
 
 
     @Test
-    void testFindProducts_NoResults() {
-        assertThrows(ProductNotFoundException.class, () -> productDao.findProducts());
-    }
-
-    @Test
     void testFindProducts_NotEmpty() {
         when(products.stream()).thenReturn(getSampleProducts().stream());
 
@@ -89,6 +84,14 @@ class ArrayListProductDaoTest {
         productDao.save(productToUpdate);
 
         verify(products).set(products.indexOf(productToUpdate), productToUpdate);
+    }
+
+    @Test
+    void testSave_ThrowsBadProductRequestException() {
+        Product productToUpdate = getSampleProducts().get(4);
+        productToUpdate.setCode("");
+
+        assertThrows(BadProductRequestException.class, () -> productDao.save(productToUpdate));
     }
 
     @Test
