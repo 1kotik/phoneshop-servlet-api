@@ -1,35 +1,17 @@
 package com.es.phoneshop.model.product;
 
-import com.es.phoneshop.model.product.exception.BadProductRequestException;
-import com.es.phoneshop.model.product.exception.ProductNotFoundException;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Currency;
 import java.util.List;
+import java.util.Optional;
 
 public class ArrayListProductDao implements ProductDao {
     private Long currentProductId;
     private ArrayList<Product> products;
+    private static ArrayListProductDao instance;
 
-    public ArrayListProductDao(ArrayList<Product> products) {
-        if (products == null) {
-            this.products = new ArrayList<>();
-            currentProductId = 0L;
-        } else {
-            this.products = products;
-            if (!products.isEmpty()) {
-                currentProductId = products.stream()
-                        .max(Comparator.comparing(Product::getId))
-                        .get().getId();
-            } else {
-                currentProductId = 0L;
-            }
-        }
-    }
-
-    public ArrayListProductDao() {
+    private ArrayListProductDao() {
         products = new ArrayList<>();
         currentProductId = 0L;
         Currency usd = Currency.getInstance("USD");
@@ -49,45 +31,39 @@ public class ArrayListProductDao implements ProductDao {
         products.add(new Product(++currentProductId, "simsxg75", "Siemens SXG75", new BigDecimal(150), usd, 40, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Siemens/Siemens%20SXG75.jpg"));
     }
 
+    public static ArrayListProductDao getInstance() {
+        if (instance == null) {
+            instance = new ArrayListProductDao();
+        }
+        return instance;
+    }
+
     @Override
-    public synchronized Product getProduct(Long id) {
+    public synchronized Optional<Product> getProduct(Long id) {
         if (id == null) {
-            throw new BadProductRequestException("Cannot search. Product ID is null");
+            throw new IllegalArgumentException("Cannot search. Product ID is null");
         }
 
         return products.stream()
                 .filter(product -> id.equals(product.getId()))
-                .findFirst()
-                .orElseThrow(() -> new ProductNotFoundException("Product is not found"));
+                .findFirst();
     }
 
     @Override
     public synchronized List<Product> findProducts() {
-        List<Product> result = products.stream()
-                .filter(product -> BigDecimal.ZERO.compareTo(product.getPrice()) < 0)
-                .filter(product -> product.getStock() > 0)
-                .filter(product -> !product.getDescription().isEmpty())
-                .toList();
-
-        return new ArrayList<>(result);
+        return products;
     }
 
     @Override
     public synchronized void save(Product product) {
-        Product productToUpdate;
-        if (product.getDescription().isEmpty()
-                || product.getPrice() == null
-                || product.getPrice().compareTo(BigDecimal.ZERO) < 0
-                || product.getStock() < 0
-                || product.getCode().isEmpty()
-                || product.getImageUrl().isEmpty()) {
-            throw new BadProductRequestException("");
+        Optional<Product> productToUpdate;
+        if (isProductValidToSave(product)) {
+            throw new IllegalArgumentException("Fill in all parameters correctly!");
         }
-        if ((product.getId() != null)
-                && (productToUpdate = products.stream()
-                .filter(listedProduct -> product.getId().equals(listedProduct.getId()))
-                .findFirst().orElse(null)) != null) {
-            products.set(products.indexOf(productToUpdate), product);
+
+        productToUpdate = getProductToUpdate(product);
+        if (productToUpdate.isPresent()) {
+            products.set(products.indexOf(productToUpdate.get()), product);
 
         } else {
             product.setId(++currentProductId);
@@ -98,12 +74,27 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public synchronized void delete(Long id) {
         if (id == null) {
-            throw new BadProductRequestException("Cannot delete. Product ID is null");
+            throw new IllegalArgumentException("Cannot delete. Product ID is null");
         }
-        boolean isRemoved = products.removeIf(product -> id.equals(product.getId()));
 
-        if (!isRemoved) {
-            throw new ProductNotFoundException("Product to delete is not found");
+        products.removeIf(product -> id.equals(product.getId()));
+    }
+
+    private boolean isProductValidToSave(Product product) {
+        return product.getDescription().isEmpty()
+                || product.getPrice() == null
+                || product.getPrice().compareTo(BigDecimal.ZERO) < 0
+                || product.getStock() < 0
+                || product.getCode().isEmpty()
+                || product.getImageUrl().isEmpty();
+    }
+
+    private Optional<Product> getProductToUpdate(Product product) {
+        if (product.getId() != null) {
+            return products.stream()
+                    .filter(listedProduct -> product.getId().equals(listedProduct.getId()))
+                    .findFirst();
         }
+        return Optional.empty();
     }
 }

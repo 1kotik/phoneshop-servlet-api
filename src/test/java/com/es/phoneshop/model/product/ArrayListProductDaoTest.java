@@ -1,8 +1,6 @@
 package com.es.phoneshop.model.product;
 
 
-import com.es.phoneshop.model.product.exception.BadProductRequestException;
-import com.es.phoneshop.model.product.exception.ProductNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -14,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -24,50 +23,32 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ArrayListProductDaoTest {
+public class ArrayListProductDaoTest {
 
     @Mock
     private ArrayList<Product> products;
 
     @InjectMocks
-    private ArrayListProductDao productDao = new ArrayListProductDao(products);
-
+    private ArrayListProductDao productDao = ArrayListProductDao.getInstance();
 
     @Test
-    void testFindProducts_NotEmpty() {
-        when(products.stream()).thenReturn(getSampleProducts().stream());
-
-        List<Product> result = productDao.findProducts();
-
-        assertTrue(result.stream().allMatch(product -> BigDecimal.ZERO.compareTo(product.getPrice()) < 0));
-        assertTrue(result.stream().allMatch(product -> product.getStock() > 0));
-        assertTrue(result.stream().noneMatch(product -> product.getDescription().isEmpty()));
+    public void testGetProductThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> productDao.getProduct(null));
     }
 
     @Test
-    void testGetProduct_BadRequest() {
-        assertThrows(BadProductRequestException.class, () -> productDao.getProduct(null));
-    }
-
-    @Test
-    void testGetProduct_NotFound() {
-        when(products.stream()).thenReturn(getSampleProducts().stream());
-
-        assertThrows(ProductNotFoundException.class, () -> productDao.getProduct(10L));
-    }
-
-    @Test
-    void testGetProduct_Success() {
+    public void testGetProductSuccess() {
         Product requestedProduct = getSampleProducts().get(2);
         when(products.stream()).thenReturn(getSampleProducts().stream());
 
-        Product result = productDao.getProduct(requestedProduct.getId());
+        Optional<Product> result = productDao.getProduct(requestedProduct.getId());
 
-        assertEquals(result, requestedProduct);
+        assertTrue(result.isPresent());
+        assertEquals(result.get(), requestedProduct);
     }
 
     @Test
-    void testSave_AddNew() {
+    public void testSaveAddNew() {
         Product newProduct = getSampleProducts().get(4);
         when(products.stream()).thenReturn(getSampleProducts().stream().limit(4));
 
@@ -77,7 +58,7 @@ class ArrayListProductDaoTest {
     }
 
     @Test
-    void testSave_Update() {
+    public void testSaveUpdate() {
         Product productToUpdate = getSampleProducts().get(4);
         when(products.stream()).thenReturn(getSampleProducts().stream());
 
@@ -87,28 +68,20 @@ class ArrayListProductDaoTest {
     }
 
     @Test
-    void testSave_ThrowsBadProductRequestException() {
+    public void testSaveThrowsIllegalArgumentException() {
         Product productToUpdate = getSampleProducts().get(4);
         productToUpdate.setCode("");
 
-        assertThrows(BadProductRequestException.class, () -> productDao.save(productToUpdate));
+        assertThrows(IllegalArgumentException.class, () -> productDao.save(productToUpdate));
     }
 
     @Test
-    void testDelete_BadRequest() {
-        assertThrows(BadProductRequestException.class, () -> productDao.delete(null));
+    public void testDeleteThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> productDao.delete(null));
     }
 
     @Test
-    void testDelete_NotFound() {
-        Long id = 10L;
-        when(products.removeIf(ArgumentMatchers.<Predicate<Product>>any())).thenReturn(false);
-
-        assertThrows(ProductNotFoundException.class, () -> productDao.delete(id));
-    }
-
-    @Test
-    void testDelete_Success() {
+    public void testDeleteSuccess() {
         Long id = 5L;
         when(products.removeIf(ArgumentMatchers.<Predicate<Product>>any())).thenReturn(true);
 
@@ -116,7 +89,7 @@ class ArrayListProductDaoTest {
     }
 
 
-    List<Product> getSampleProducts() {
+    private List<Product> getSampleProducts() {
         Currency usd = Currency.getInstance("USD");
         List<Product> samples = new ArrayList<>();
         samples.add(new Product(1L, "sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg"));

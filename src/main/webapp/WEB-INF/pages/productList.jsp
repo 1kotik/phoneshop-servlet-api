@@ -8,10 +8,6 @@
     <p>
         Welcome to Expert-Soft training!
     </p>
-    <form method="get">
-        <input type="hidden" name="action" value="redirect-to-add-product-page"/>
-        <input type="submit" value="Add new product"/>
-    </form>
     <table>
         <thead>
         <tr>
@@ -25,14 +21,9 @@
                 <td>
                     <img class="product-tile" src="${product.imageUrl}">
                 </td>
-                <td><form method="get">
-                    <input type="hidden" name="action" value="get-product"/>
-                    <input type="hidden" name="product-id" value="${product.id}"/>
-                    <input type="submit" value="${product.description}"/>
-                </form></td>
+                <td>${product.description}</td>
                 <td class="price">
-                    <fmt:formatNumber value="${product.price}" type="currency"
-                                      currencySymbol="${product.currency.symbol}"/>
+                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
                 </td>
             </tr>
         </c:forEach>
