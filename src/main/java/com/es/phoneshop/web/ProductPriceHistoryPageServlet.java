@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class ProductListPageServlet extends HttpServlet {
+public class ProductPriceHistoryPageServlet extends HttpServlet {
     private ProductService productService;
 
     @Override
@@ -20,12 +20,8 @@ public class ProductListPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String query = request.getParameter("query");
-        String sortCriteria = request.getParameter("sortCriteria");
-        String sortOrder = request.getParameter("order");
-
-        request.setAttribute("products", productService.findProducts(query, sortCriteria, sortOrder));
-        request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);
+        Long productId = Long.parseLong(request.getPathInfo().substring(1));
+        request.setAttribute("priceHistory", productService.getProduct(productId).getPriceHistory());
+        request.getRequestDispatcher("/WEB-INF/pages/productPriceHistory.jsp").forward(request, response);
     }
-
 }

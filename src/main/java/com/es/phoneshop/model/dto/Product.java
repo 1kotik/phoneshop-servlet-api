@@ -1,24 +1,44 @@
-package com.es.phoneshop.model.product;
+package com.es.phoneshop.model.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 import java.util.Objects;
 
 public class Product {
     private Long id;
     private String code;
     private String description;
-    /** null means there is no price because the product is outdated or new */
+    /**
+     * null means there is no price because the product is outdated or new
+     */
     private BigDecimal price;
-    /** can be null if the price is null */
+    /**
+     * can be null if the price is null
+     */
     private Currency currency;
     private int stock;
     private String imageUrl;
+    private List<PriceRecord> priceHistory;
 
     public Product() {
     }
 
-    public Product(Long id, String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
+    public Product(Product product) {
+        this.id = product.id;
+        this.code = product.code;
+        this.description = product.description;
+        this.price = product.price;
+        this.currency = product.currency;
+        this.stock = product.stock;
+        this.imageUrl = product.imageUrl;
+        this.priceHistory = new ArrayList<>(product.priceHistory.stream()
+                .map(PriceRecord::new)
+                .toList());
+    }
+
+    public Product(Long id, String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl, List<PriceRecord> priceHistory) {
         this.id = id;
         this.code = code;
         this.description = description;
@@ -26,6 +46,17 @@ public class Product {
         this.currency = currency;
         this.stock = stock;
         this.imageUrl = imageUrl;
+        this.priceHistory = priceHistory;
+    }
+
+    public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl, List<PriceRecord> priceHistory) {
+        this.code = code;
+        this.description = description;
+        this.price = price;
+        this.currency = currency;
+        this.stock = stock;
+        this.imageUrl = imageUrl;
+        this.priceHistory = priceHistory;
     }
 
     public Long getId() {
@@ -84,6 +115,14 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public List<PriceRecord> getPriceHistory() {
+        return priceHistory;
+    }
+
+    public void setPriceHistory(List<PriceRecord> priceHistory) {
+        this.priceHistory = priceHistory;
+    }
+
     public boolean equals(Object object) {
         if (object == this) {
             return true;
@@ -104,7 +143,7 @@ public class Product {
                 && this.imageUrl.equals(product.getImageUrl());
     }
 
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(id, code, description, price, currency, stock, imageUrl);
     }
 }
