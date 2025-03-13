@@ -8,12 +8,22 @@
     <p>
         Welcome to Expert-Soft training!
     </p>
+    <form id="searchForm">
+        <input name="query" value="${param.query}">
+        <button type="submit">Search</button>
+    </form>
     <table>
         <thead>
         <tr>
             <td>Image</td>
-            <td>Description</td>
-            <td class="price">Price</td>
+            <td>Description
+                <tags:sortQuery sortCriteria="description" order="asc"/>
+                <tags:sortQuery sortCriteria="description" order="desc"/>
+            </td>
+            <td class="price">Price
+                <tags:sortQuery sortCriteria="price" order="asc"/>
+                <tags:sortQuery sortCriteria="price" order="desc"/>
+            </td>
         </tr>
         </thead>
         <c:forEach var="product" items="${products}">
@@ -21,9 +31,14 @@
                 <td>
                     <img class="product-tile" src="${product.imageUrl}">
                 </td>
-                <td>${product.description}</td>
+                <td>
+                    <a href="${pageContext.servletContext.contextPath}/products/${product.id}">${product.description}</a>
+                </td>
                 <td class="price">
-                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+                    <a href="${pageContext.servletContext.contextPath}/products/price-history/${product.id}">
+                        <fmt:formatNumber value="${product.price}" type="currency"
+                                          currencySymbol="${product.currency.symbol}"/>
+                    </a>
                 </td>
             </tr>
         </c:forEach>
