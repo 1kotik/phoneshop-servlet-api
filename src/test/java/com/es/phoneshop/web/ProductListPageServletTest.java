@@ -1,6 +1,7 @@
 package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.services.ProductService;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -31,6 +32,8 @@ public class ProductListPageServletTest {
     private RequestDispatcher requestDispatcher;
     @Mock
     private ProductService productService;
+    @Mock
+    private HttpSession session;
 
     @InjectMocks
     private ProductListPageServlet servlet = new ProductListPageServlet();
@@ -42,6 +45,7 @@ public class ProductListPageServletTest {
         when(request.getParameter("query")).thenReturn(query);
         when(request.getParameter("sortCriteria")).thenReturn(sortCriteria);
         when(request.getParameter("order")).thenReturn(sortOrder);
+        when(request.getSession()).thenReturn(session);
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
 
         servlet.doGet(request, response);
@@ -62,7 +66,7 @@ public class ProductListPageServletTest {
                 Arguments.of(query, price, asc),
                 Arguments.of(query, price, desc),
                 Arguments.of(null, description, asc,
-                Arguments.of(query, null, asc),
-                Arguments.of(query, description, null)));
+                        Arguments.of(query, null, asc),
+                        Arguments.of(query, description, null)));
     }
 }
