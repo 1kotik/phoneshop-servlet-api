@@ -1,7 +1,7 @@
 package com.es.phoneshop.model.services;
 
 import com.es.phoneshop.model.dao.ProductDao;
-import com.es.phoneshop.model.dto.Product;
+import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.helpers.enums.SortCriteria;
 import com.es.phoneshop.model.helpers.enums.SortOrder;
 import com.es.phoneshop.utils.TestUtils;
@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -26,12 +27,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceTest {
+public class DefaultProductServiceTest {
     @Mock
     private ProductDao productDao;
 
     @InjectMocks
-    private ProductService productService;
+    private DefaultProductService productService;
 
     @ParameterizedTest
     @MethodSource("getShouldFindProductsTestArguments")
@@ -77,6 +78,15 @@ public class ProductServiceTest {
         verify(productDao).delete(1L);
     }
 
+    @ParameterizedTest
+    @MethodSource("getUpdateRecentlyViewedProductsArguments")
+    public void shouldUpdateRecentlyViewedProducts(LinkedList<Product> recentlyViewedProducts, Product product) {
+        productService.updateRecentlyViewedProducts(recentlyViewedProducts, product);
+
+        assertEquals(3, recentlyViewedProducts.size());
+        assertEquals(product.getId(), recentlyViewedProducts.getFirst().getId());
+    }
+
     private static Stream<Arguments> getShouldFindProductsTestArguments() {
         String query = "samsung";
         String description = "description";
@@ -91,6 +101,13 @@ public class ProductServiceTest {
                 Arguments.of(null, description, asc),
                 Arguments.of(query, null, asc),
                 Arguments.of(query, description, null));
+    }
+
+    private static Stream<Arguments> getUpdateRecentlyViewedProductsArguments(){
+        LinkedList<Product> recentlyViewedProducts = new LinkedList<>(TestUtils.getSampleProducts());
+        return Stream.of(Arguments.of(new LinkedList<>(recentlyViewedProducts.subList(1,4)), TestUtils.getProduct()),
+                Arguments.of(new LinkedList<>(recentlyViewedProducts.subList(0,3)), TestUtils.getProduct()),
+                Arguments.of(new LinkedList<>(recentlyViewedProducts.subList(1,3)), TestUtils.getProduct()));
     }
 
 }

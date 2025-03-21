@@ -1,7 +1,8 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.services.ProductService;
+import com.es.phoneshop.model.services.DefaultProductService;
 import com.es.phoneshop.model.helpers.utils.ProductUtils;
+import com.es.phoneshop.model.services.ProductService;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 
@@ -10,7 +11,7 @@ public class ProductDemoDataServletContextListener implements ServletContextList
     private ProductService productService;
 
     public ProductDemoDataServletContextListener() {
-        productService = ProductService.getInstance();
+        productService = DefaultProductService.getInstance();
     }
 
     @Override

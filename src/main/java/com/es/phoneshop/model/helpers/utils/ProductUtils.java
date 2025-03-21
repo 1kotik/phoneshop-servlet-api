@@ -1,7 +1,7 @@
 package com.es.phoneshop.model.helpers.utils;
 
-import com.es.phoneshop.model.dto.PriceRecord;
-import com.es.phoneshop.model.dto.Product;
+import com.es.phoneshop.model.model.PriceRecord;
+import com.es.phoneshop.model.model.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

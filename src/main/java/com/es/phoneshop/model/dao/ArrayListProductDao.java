@@ -1,6 +1,6 @@
 package com.es.phoneshop.model.dao;
 
-import com.es.phoneshop.model.dto.Product;
+import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.helpers.comparators.ProductDescriptionComparator;
 import com.es.phoneshop.model.helpers.utils.ProductQueryUtils;
 import com.es.phoneshop.model.helpers.enums.SortCriteria;
@@ -113,5 +113,4 @@ public class ArrayListProductDao implements ProductDao {
 
         return comparator;
     }
-
 }

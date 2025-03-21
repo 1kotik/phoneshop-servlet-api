@@ -1,6 +1,6 @@
 package com.es.phoneshop.model.helpers.comparators;
 
-import com.es.phoneshop.model.dto.Product;
+import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.helpers.utils.ProductQueryUtils;
 
 

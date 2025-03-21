@@ -1,5 +1,6 @@
 package com.es.phoneshop.web;
 
+import com.es.phoneshop.model.services.DefaultProductService;
 import com.es.phoneshop.model.services.ProductService;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -15,7 +16,7 @@ public class ProductPriceHistoryPageServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        productService = ProductService.getInstance();
+        productService = DefaultProductService.getInstance();
     }
 
     @Override
