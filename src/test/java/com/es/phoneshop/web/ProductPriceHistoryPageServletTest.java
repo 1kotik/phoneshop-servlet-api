@@ -1,6 +1,6 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.dto.Product;
+import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.services.ProductService;
 import com.es.phoneshop.utils.TestUtils;
 import jakarta.servlet.RequestDispatcher;

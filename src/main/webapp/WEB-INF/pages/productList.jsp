@@ -4,10 +4,33 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
+<jsp:useBean id="cart" type="com.es.phoneshop.model.model.Cart" scope="request"/>
+<jsp:useBean id="recentlyViewedProducts" type="java.util.List" scope="request"/>
+
 <tags:master pageTitle="Product List">
     <p>
         Welcome to Expert-Soft training!
     </p>
+
+    <c:if test="${not empty cart.items}">
+        <h1>Cart</h1>
+        <table>
+            <thead>
+            <tr>
+                <td>Product</td>
+                <td>Quantity</td>
+            </tr>
+            </thead>
+            <c:forEach var="item" items="${cart.items}">
+                <tr>
+                    <td>${item.product.description}</td>
+                    <td>${item.quantity}</td>
+                </tr>
+            </c:forEach>
+        </table>
+    </c:if>
+    <p></p>
+
     <form id="searchForm">
         <input name="query" value="${param.query}">
         <button type="submit">Search</button>
@@ -43,4 +66,18 @@
             </tr>
         </c:forEach>
     </table>
+    <c:if test="${not empty recentlyViewedProducts}">
+        <h2>Recently viewed products</h2>
+        <div class="recently-viewed">
+            <c:forEach var="viewedProduct" items="${recentlyViewedProducts}">
+                <div class="recently-viewed-product">
+                    <img src="${viewedProduct.imageUrl}">
+                    <div><a href="${pageContext.servletContext.contextPath}/products/${viewedProduct.id}">
+                        ${viewedProduct.description}</a></div>
+                    <div><fmt:formatNumber value="${viewedProduct.price}" type="currency"
+                                         currencySymbol="${viewedProduct.currency.symbol}"/></div>
+                </div>
+            </c:forEach>
+        </div>
+    </c:if>
 </tags:master>

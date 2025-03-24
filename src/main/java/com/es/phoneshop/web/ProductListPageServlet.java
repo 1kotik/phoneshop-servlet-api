@@ -1,5 +1,7 @@
 package com.es.phoneshop.web;
 
+import com.es.phoneshop.model.helpers.utils.HttpSessionUtils;
+import com.es.phoneshop.model.services.DefaultProductService;
 import com.es.phoneshop.model.services.ProductService;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -15,7 +17,7 @@ public class ProductListPageServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        productService = ProductService.getInstance();
+        productService = DefaultProductService.getInstance();
     }
 
     @Override
@@ -23,8 +25,10 @@ public class ProductListPageServlet extends HttpServlet {
         String query = request.getParameter("query");
         String sortCriteria = request.getParameter("sortCriteria");
         String sortOrder = request.getParameter("order");
-
+        
+        request.setAttribute("recentlyViewedProducts", HttpSessionUtils.getRecentlyViewedProductsFromSession(request.getSession()));
         request.setAttribute("products", productService.findProducts(query, sortCriteria, sortOrder));
+        request.setAttribute("cart", HttpSessionUtils.getCartFromSession(request.getSession()));
         request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);
     }
 

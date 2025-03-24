@@ -1,7 +1,7 @@
 package com.es.phoneshop.model.dao;
 
 
-import com.es.phoneshop.model.dto.Product;
+import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.helpers.enums.SortCriteria;
 import com.es.phoneshop.model.helpers.enums.SortOrder;
 import com.es.phoneshop.utils.TestUtils;
@@ -50,7 +50,7 @@ public class ArrayListProductDaoTest {
 
         List<Product> result = productDao.findProducts("samsung", sortCriteria, sortOrder);
 
-        assertEquals(result.size(), 2);
+        assertEquals(2, result.size());
     }
 
     @Test

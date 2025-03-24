@@ -1,12 +1,13 @@
-package com.es.phoneshop.model.dto;
+package com.es.phoneshop.model.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 
-public class Product implements Cloneable{
+public class Product implements Cloneable, Serializable {
     private Long id;
     private String code;
     private String description;
