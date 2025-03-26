@@ -5,6 +5,7 @@ import com.es.phoneshop.model.model.Cart;
 import com.es.phoneshop.model.model.CartItem;
 import com.es.phoneshop.model.model.Product;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class DefaultCartService implements CartService {
         Optional<CartItem> itemToAdd = getItemByProductId(cart, productId);
         itemToAdd.ifPresentOrElse(item -> addItemIfAlreadyInCart(cart, item, quantity),
                 () -> addItemIfNotInCart(cart, productId, quantity));
+        calculateCartTotals(cart);
     }
 
     @Override
@@ -39,6 +41,20 @@ public class DefaultCartService implements CartService {
         return cart.getItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst();
+    }
+
+    @Override
+    public synchronized void updateItem(Cart cart, Long productId, int quantity) {
+        Optional<CartItem> itemToUpdate = getItemByProductId(cart, productId);
+        itemToUpdate.ifPresentOrElse(item -> updateItemIfAlreadyInCart(cart, item, quantity),
+                () -> addItemIfNotInCart(cart, productId, quantity));
+        calculateCartTotals(cart);
+    }
+
+    @Override
+    public synchronized void deleteItem(Cart cart, Long productId) {
+        cart.getItems().removeIf(item -> productId.equals(item.getProduct().getId()));
+        calculateCartTotals(cart);
     }
 
     private void addItemIfAlreadyInCart(Cart cart, CartItem item, int quantity) {
@@ -64,4 +80,20 @@ public class DefaultCartService implements CartService {
         items.set(items.indexOf(item), item);
     }
 
+    private void calculateCartTotals(Cart cart) {
+        cart.setTotalQuantity(cart.getItems().stream()
+                .mapToInt(CartItem::getQuantity).sum());
+        cart.setTotalPrice(cart.getItems().stream()
+                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
+    }
+
+    private void updateItemIfAlreadyInCart(Cart cart, CartItem item, int quantity) {
+        if (quantity <= item.getProduct().getStock()) {
+            item.setQuantity(quantity);
+            setItem(cart, item);
+        } else {
+            throw new ProductOutOfStockException(item.getProduct().getStock(), quantity);
+        }
+    }
 }

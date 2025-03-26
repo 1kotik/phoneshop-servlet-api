@@ -4,34 +4,19 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <jsp:useBean id="product" type="com.es.phoneshop.model.model.Product" scope="request"/>
-<jsp:useBean id="cart" type="com.es.phoneshop.model.model.Cart" scope="request"/>
 <jsp:useBean id="recentlyViewedProducts" type="java.util.List" scope="request"/>
 
 <tags:master pageTitle="Product List">
 
     <c:if test="${not empty param.error}">
-        Error occurred adding product
+        <p>Error occurred adding product</p>
     </c:if>
     <c:if test="${not empty param.message}">
-        ${param.message}
+        <p>${param.message}</p>
     </c:if>
-    <c:if test="${not empty cart.items}">
-        <h1>Cart</h1>
-        <table>
-            <thead>
-            <tr>
-                <td>Product</td>
-                <td>Quantity</td>
-            </tr>
-            </thead>
-            <c:forEach var="item" items="${cart.items}">
-                <tr>
-                    <td>${item.product.description}</td>
-                    <td>${item.quantity}</td>
-                </tr>
-            </c:forEach>
-        </table>
-    </c:if>
+    <a href="${pageContext.servletContext.contextPath}/cart">
+        <p>Go to cart</p>
+    </a>
 
     <h1>Product Info</h1>
     <img src="${product.imageUrl}">
@@ -59,9 +44,9 @@
         </tr>
     </table>
 
-    <form method="post">
+    <form method="post" action="${pageContext.servletContext.contextPath}/cart/add-cart-item/${product.id}">
         <p>Set quantity</p>
-        <input name="quantity" value="1">
+        <input class="quantity-input" name="quantity" value="1">
         <button>Add to cart</button>
     </form>
     <c:if test="${not empty param.error}">
@@ -76,7 +61,7 @@
                     <div><a href="${pageContext.servletContext.contextPath}/products/${viewedProduct.id}">
                             ${viewedProduct.description}</a></div>
                     <div><fmt:formatNumber value="${viewedProduct.price}" type="currency"
-                                         currencySymbol="${viewedProduct.currency.symbol}"/></div>
+                                           currencySymbol="${viewedProduct.currency.symbol}"/></div>
                 </div>
             </c:forEach>
         </div>
