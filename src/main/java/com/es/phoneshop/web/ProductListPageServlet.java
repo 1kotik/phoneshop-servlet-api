@@ -1,5 +1,6 @@
 package com.es.phoneshop.web;
 
+import com.es.phoneshop.model.helpers.utils.AppConstants;
 import com.es.phoneshop.model.helpers.utils.HttpSessionUtils;
 import com.es.phoneshop.model.services.DefaultProductService;
 import com.es.phoneshop.model.services.ProductService;
@@ -22,14 +23,13 @@ public class ProductListPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String query = request.getParameter("query");
-        String sortCriteria = request.getParameter("sortCriteria");
-        String sortOrder = request.getParameter("order");
-        
-        request.setAttribute("recentlyViewedProducts", HttpSessionUtils.getRecentlyViewedProductsFromSession(request.getSession()));
-        request.setAttribute("products", productService.findProducts(query, sortCriteria, sortOrder));
-        request.setAttribute("cart", HttpSessionUtils.getCartFromSession(request.getSession()));
-        request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);
+        String query = request.getParameter(AppConstants.Parameters.QUERY_PARAMETER);
+        String sortCriteria = request.getParameter(AppConstants.Parameters.SORT_CRITERIA_PARAMETER);
+        String sortOrder = request.getParameter(AppConstants.Parameters.ORDER_PARAMETER);
+
+        request.setAttribute(AppConstants.RequestAttributes.RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE, HttpSessionUtils.getRecentlyViewedProductsFromSession(request.getSession()));
+        request.setAttribute(AppConstants.RequestAttributes.PRODUCTS_ATTRIBUTE, productService.findProducts(query, sortCriteria, sortOrder));
+        request.getRequestDispatcher(AppConstants.JspFilePaths.PRODUCT_LIST_JSP).forward(request, response);
     }
 
 }

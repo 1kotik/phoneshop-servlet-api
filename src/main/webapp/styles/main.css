@@ -52,3 +52,13 @@ body.product-list {
     width: 70px;
     height: auto;
 }
+
+.cart-product img {
+    width: 50px;
+    height: auto;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: right;
+}

@@ -1,5 +1,6 @@
 package com.es.phoneshop.web;
 
+import com.es.phoneshop.model.helpers.utils.AppConstants;
 import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.helpers.utils.ProductUtils;
 import com.es.phoneshop.model.services.ProductService;
@@ -38,7 +39,7 @@ public class ProductDemoDataServletContextListenerTest {
         try (MockedStatic<ProductUtils> productSupplier = Mockito.mockStatic(ProductUtils.class)) {
             productSupplier.when(ProductUtils::getSampleProducts).thenReturn(TestUtils.getSampleProducts());
             when(event.getServletContext()).thenReturn(context);
-            when(context.getInitParameter("productDemoDataEnabled")).thenReturn("true");
+            when(context.getInitParameter(AppConstants.Parameters.PRODUCT_DEMO_DATA_ENABLED)).thenReturn("true");
 
             productDemoDataServletContextListener.contextInitialized(event);
 
@@ -49,7 +50,7 @@ public class ProductDemoDataServletContextListenerTest {
     @Test
     public void shouldDisableDemoDataForContextInitialized() {
         when(event.getServletContext()).thenReturn(context);
-        when(context.getInitParameter("productDemoDataEnabled")).thenReturn("false");
+        when(context.getInitParameter(AppConstants.Parameters.PRODUCT_DEMO_DATA_ENABLED)).thenReturn("false");
 
         productDemoDataServletContextListener.contextInitialized(event);
 

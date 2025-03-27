@@ -1,5 +1,6 @@
 package com.es.phoneshop.web;
 
+import com.es.phoneshop.model.helpers.utils.AppConstants;
 import com.es.phoneshop.model.services.ProductService;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,9 +43,9 @@ public class ProductListPageServletTest {
     @ParameterizedTest
     @MethodSource("getDoGetTestArguments")
     public void shouldDoGet(String query, String sortCriteria, String sortOrder) throws ServletException, IOException {
-        when(request.getParameter("query")).thenReturn(query);
-        when(request.getParameter("sortCriteria")).thenReturn(sortCriteria);
-        when(request.getParameter("order")).thenReturn(sortOrder);
+        when(request.getParameter(AppConstants.Parameters.QUERY_PARAMETER)).thenReturn(query);
+        when(request.getParameter(AppConstants.Parameters.SORT_CRITERIA_PARAMETER)).thenReturn(sortCriteria);
+        when(request.getParameter(AppConstants.Parameters.ORDER_PARAMETER)).thenReturn(sortOrder);
         when(request.getSession()).thenReturn(session);
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
 

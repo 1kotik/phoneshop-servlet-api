@@ -103,4 +103,86 @@ public class DefaultCartServiceTest {
                 .count());
     }
 
+    @Test
+    public void shouldUpdateItemIfNotInCart() {
+        Cart cart = TestUtils.getSampleCart();
+        Long productId = 6L;
+        int quantity = 2;
+        Product product = TestUtils.getProduct();
+        product.setId(productId);
+        when(productService.getProduct(productId)).thenReturn(product);
+
+        cartService.updateItem(cart, productId, quantity);
+
+        verify(productService).getProduct(productId);
+        verifyNoMoreInteractions(productService);
+        assertEquals(1, cart.getItems().stream()
+                .filter(productItem -> productId.equals(productItem.getProduct().getId()))
+                .count());
+    }
+
+    @Test
+    public void shouldThrowProductOutOfStockExceptionWhenUpdateItemNotInCart() {
+        Cart cart = TestUtils.getSampleCart();
+        Long productId = 6L;
+        int quantity = 1000;
+        Product product = TestUtils.getProduct();
+        product.setId(productId);
+        when(productService.getProduct(productId)).thenReturn(product);
+
+        assertThrows(ProductOutOfStockException.class, () -> cartService.updateItem(cart, productId, quantity));
+        verify(productService).getProduct(productId);
+        verifyNoMoreInteractions(productService);
+    }
+
+    @Test
+    public void shouldUpdateItemIfInCart() {
+        Cart cart = TestUtils.getSampleCart();
+        Long productId = 1L;
+        int quantity = 2;
+
+        cartService.updateItem(cart, productId, quantity);
+
+        verifyNoInteractions(productService);
+        assertEquals(quantity, cart.getItems().stream()
+                .filter(cartItem -> productId.equals(cartItem.getProduct().getId()))
+                .map(CartItem::getQuantity).findFirst().get());
+        assertEquals(1, cart.getItems().stream()
+                .filter(productItem -> productId.equals(productItem.getProduct().getId()))
+                .count());
+    }
+
+    @Test
+    public void shouldThrowProductOutOfStockExceptionWhenUpdateItemInCart() {
+        Cart cart = TestUtils.getSampleCart();
+        Long productId = 1L;
+        int quantity = 1000;
+        int oldQuantity = cart.getItems().stream()
+                .filter(cartItem -> productId.equals(cartItem.getProduct().getId()))
+                .map(CartItem::getQuantity).findFirst().get();
+
+        assertThrows(ProductOutOfStockException.class, () -> cartService.updateItem(cart, productId, quantity));
+        verifyNoInteractions(productService);
+        assertEquals(oldQuantity, cart.getItems().stream()
+                .filter(cartItem -> productId.equals(cartItem.getProduct().getId()))
+                .map(CartItem::getQuantity).findFirst().get());
+        assertEquals(1, cart.getItems().stream()
+                .filter(productItem -> productId.equals(productItem.getProduct().getId()))
+                .count());
+    }
+
+    @Test
+    public void shouldDeleteItem() {
+        Cart cart = TestUtils.getSampleCart();
+        Long productId = 1L;
+
+        cartService.deleteItem(cart, productId);
+
+        verifyNoInteractions(productService);
+        assertEquals(0, cart.getItems().stream()
+                .filter(productItem -> productId.equals(productItem.getProduct().getId()))
+                .count());
+    }
+
+
 }

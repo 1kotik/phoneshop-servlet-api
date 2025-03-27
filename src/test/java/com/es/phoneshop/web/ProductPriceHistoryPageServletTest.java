@@ -1,5 +1,6 @@
 package com.es.phoneshop.web;
 
+import com.es.phoneshop.model.helpers.utils.AppConstants;
 import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.services.ProductService;
 import com.es.phoneshop.utils.TestUtils;
@@ -42,19 +43,19 @@ public class ProductPriceHistoryPageServletTest {
         Product product = TestUtils.getProduct();
         when(request.getPathInfo()).thenReturn("/1");
         when(productService.getProduct(1L)).thenReturn(product);
-        doNothing().when(request).setAttribute("priceHistory", product.getPriceHistory());
+        doNothing().when(request).setAttribute(AppConstants.RequestAttributes.PRICE_HISTORY_ATTRIBUTE, product.getPriceHistory());
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
 
         servlet.doGet(request, response);
 
-        verify(request).getRequestDispatcher("/WEB-INF/pages/productPriceHistory.jsp");
+        verify(request).getRequestDispatcher(AppConstants.JspFilePaths.PRODUCT_PRICE_HISTORY_JSP);
         verify(requestDispatcher).forward(request, response);
         verify(productService).getProduct(1L);
-        verify(request).setAttribute("priceHistory", product.getPriceHistory());
+        verify(request).setAttribute(AppConstants.RequestAttributes.PRICE_HISTORY_ATTRIBUTE, product.getPriceHistory());
     }
 
     @Test
-    public void shouldForwardToError404Page() throws ServletException, IOException {
+    public void shouldForwardToError404Page() {
         when(request.getPathInfo()).thenReturn("/1");
         when(productService.getProduct(1L)).thenThrow(new NoSuchElementException());
 
@@ -63,7 +64,7 @@ public class ProductPriceHistoryPageServletTest {
     }
 
     @Test
-    public void shouldForwardToGenericErrorPage() throws ServletException, IOException {
+    public void shouldForwardToGenericErrorPage() {
         when(request.getPathInfo()).thenReturn("/invalid");
 
         assertThrows(Throwable.class, () -> servlet.doGet(request, response));

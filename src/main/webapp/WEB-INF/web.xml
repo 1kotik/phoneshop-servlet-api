@@ -3,55 +3,95 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-  <display-name>Phoneshop servlet api training</display-name>
+    <display-name>Phoneshop servlet api training</display-name>
 
-  <context-param>
-    <param-name>productDemoDataEnabled</param-name>
-    <param-value>true</param-value>
-  </context-param>
+    <context-param>
+        <param-name>productDemoDataEnabled</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
-  <servlet>
-    <servlet-name>productList</servlet-name>
-    <servlet-class>com.es.phoneshop.web.ProductListPageServlet</servlet-class>
-  </servlet>
+    <filter>
+        <filter-name>hiddenHttpMethod</filter-name>
+        <filter-class>com.es.phoneshop.web.HiddenHttpMethodFilter</filter-class>
+    </filter>
 
-  <servlet>
-    <servlet-name>productDetails</servlet-name>
-    <servlet-class>com.es.phoneshop.web.ProductDetailsPageServlet</servlet-class>
-  </servlet>
-  
-  <servlet>
-    <servlet-name>productPriceHistory</servlet-name>
-    <servlet-class>com.es.phoneshop.web.ProductPriceHistoryPageServlet</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>productList</servlet-name>
-    <url-pattern>/products</url-pattern>
-  </servlet-mapping>
+    <filter-mapping>
+        <filter-name>hiddenHttpMethod</filter-name>
+        <url-pattern>/cart/*</url-pattern>
+    </filter-mapping>
 
-  <servlet-mapping>
-    <servlet-name>productDetails</servlet-name>
-    <url-pattern>/products/*</url-pattern>
-  </servlet-mapping>
-  
-  <servlet-mapping>
-    <servlet-name>productPriceHistory</servlet-name>
-    <url-pattern>/products/price-history/*</url-pattern>
-  </servlet-mapping>
+    <servlet>
+        <servlet-name>productList</servlet-name>
+        <servlet-class>com.es.phoneshop.web.ProductListPageServlet</servlet-class>
+    </servlet>
 
-  <listener>
-    <listener-class>com.es.phoneshop.web.ProductDemoDataServletContextListener</listener-class>
-  </listener>
+    <servlet-mapping>
+        <servlet-name>productList</servlet-name>
+        <url-pattern>/products</url-pattern>
+    </servlet-mapping>
 
-  <error-page>
-    <location>/WEB-INF/pages/error404.jsp</location>
-    <exception-type>java.util.NoSuchElementException</exception-type>
-  </error-page>
+    <servlet>
+        <servlet-name>productDetails</servlet-name>
+        <servlet-class>com.es.phoneshop.web.ProductDetailsPageServlet</servlet-class>
+    </servlet>
 
-  <error-page>
-    <location>/WEB-INF/pages/genericError.jsp</location>
-    <error-code>500</error-code>
-  </error-page>
+    <servlet-mapping>
+        <servlet-name>productDetails</servlet-name>
+        <url-pattern>/products/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>productPriceHistory</servlet-name>
+        <servlet-class>com.es.phoneshop.web.ProductPriceHistoryPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>productPriceHistory</servlet-name>
+        <url-pattern>/products/price-history/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>cart</servlet-name>
+        <servlet-class>com.es.phoneshop.web.CartPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>cart</servlet-name>
+        <url-pattern>/cart</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>miniCart</servlet-name>
+        <servlet-class>com.es.phoneshop.web.MiniCartServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>miniCart</servlet-name>
+        <url-pattern>/cart/mini-cart</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>cartItem</servlet-name>
+        <servlet-class>com.es.phoneshop.web.CartItemServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>cartItem</servlet-name>
+        <url-pattern>/cart/modify-cart/*</url-pattern>
+    </servlet-mapping>
+
+    <listener>
+        <listener-class>com.es.phoneshop.web.ProductDemoDataServletContextListener</listener-class>
+    </listener>
+
+    <error-page>
+        <location>/WEB-INF/pages/error404.jsp</location>
+        <exception-type>java.util.NoSuchElementException</exception-type>
+    </error-page>
+
+    <error-page>
+        <location>/WEB-INF/pages/genericError.jsp</location>
+        <error-code>500</error-code>
+    </error-page>
 
 </web-app>
