@@ -10,4 +10,5 @@ public interface CartService {
     Optional<CartItem> getItemByProductId(Cart cart, Long productId);
     void updateItem(Cart cart, Long productId, int quantity);
     void deleteItem(Cart cart, Long productId);
+    void clearCart(Cart cart);
 }

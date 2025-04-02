@@ -36,7 +36,7 @@
                         </td>
                         <td>
                             <c:set var="quantityValue" value="${quantityValues.get(item.product.id)}"/>
-                            <c:set var="error" value="${errors.get(item.product.id)}"/>
+                            <c:set var="error" value="${errors.get(item.product.id.toString())}"/>
                             <input class="quantity-input" name="quantity"
                                    value="${not empty quantityValue ? quantityValue : item.quantity}">
                             <input type="hidden" name="productId" value="${item.product.id}">
@@ -70,6 +70,9 @@
             <p>
                 <button>Update</button>
             </p>
+        </form>
+        <form action="${pageContext.servletContext.contextPath}/checkout">
+            <button>Checkout</button>
         </form>
     </c:if>
     <form id="delete" method="post">

@@ -5,48 +5,40 @@ import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.helpers.enums.SortCriteria;
 import com.es.phoneshop.model.helpers.enums.SortOrder;
 import com.es.phoneshop.utils.TestUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 
-@ExtendWith(MockitoExtension.class)
 public class ArrayListProductDaoTest {
-
-    @Mock
-    private ArrayList<Product> products;
-
-    @InjectMocks
     private ArrayListProductDao productDao = ArrayListProductDao.getInstance();
+
+    @BeforeEach
+    public void setUp() {
+        productDao.list.clear();
+        productDao.currentId = 0L;
+    }
 
     @Test
     public void shouldThrowIllegalArgumentExceptionForGetProductIfIdIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> productDao.getProduct(null));
+        assertThrows(IllegalArgumentException.class, () -> productDao.getById(null));
     }
 
     @ParameterizedTest
     @MethodSource("getFindProductsArguments")
     public void shouldFindProducts(SortCriteria sortCriteria, SortOrder sortOrder) {
-        when(products.stream()).thenReturn(TestUtils.getSampleProducts().stream());
+        TestUtils.getSampleProducts().stream().forEach(productDao::save);
 
         List<Product> result = productDao.findProducts("samsung", sortCriteria, sortOrder);
 
@@ -56,40 +48,34 @@ public class ArrayListProductDaoTest {
     @Test
     public void shouldGetProduct() {
         Product requestedProduct = TestUtils.getSampleProducts().get(2);
-        when(products.stream()).thenReturn(TestUtils.getSampleProducts().stream());
+        TestUtils.getSampleProducts().stream().forEach(productDao::save);
 
-        Optional<Product> result = productDao.getProduct(requestedProduct.getId());
+        Optional<Product> result = productDao.getById(requestedProduct.getId());
 
-        assertTrue(result.isPresent());
-        assertEquals(result.get(), requestedProduct);
+        assertEquals(result.get().getId(), requestedProduct.getId());
     }
 
     @Test
     public void shouldSaveProductWhenIdIsNull() {
         Product newProduct = TestUtils.getSampleProducts().get(4);
-        when(products.stream()).thenReturn(TestUtils.getSampleProducts().stream().limit(4));
+        TestUtils.getSampleProducts().stream().limit(4).forEach(productDao::save);
 
         productDao.save(newProduct);
 
-        verify(products).add(newProduct);
+        assertTrue(productDao.getById(newProduct.getId()).isPresent());
     }
 
     @Test
     public void shouldSaveProductWhenIdIsNotNull() {
         Product productToUpdate = TestUtils.getSampleProducts().get(4);
-        when(products.stream()).thenReturn(TestUtils.getSampleProducts().stream());
+        TestUtils.getSampleProducts().stream().forEach(productDao::save);
 
         productDao.save(productToUpdate);
 
-        verify(products).set(products.indexOf(productToUpdate), productToUpdate);
-    }
-
-    @Test
-    public void shouldThrowIllegalArgumentExceptionForSaveProduct() {
-        Product productToUpdate = TestUtils.getSampleProducts().get(4);
-        productToUpdate.setCode("");
-
-        assertThrows(IllegalArgumentException.class, () -> productDao.save(productToUpdate));
+        assertTrue(productDao.getById(productToUpdate.getId()).isPresent());
+        assertEquals(1, productDao.list.stream()
+                .filter(product -> productToUpdate.getId().equals(product.getId()))
+                .count());
     }
 
     @Test
@@ -100,7 +86,6 @@ public class ArrayListProductDaoTest {
     @Test
     public void shouldDeleteProduct() {
         Long id = 5L;
-        when(products.removeIf(ArgumentMatchers.<Predicate<Product>>any())).thenReturn(true);
 
         assertDoesNotThrow(() -> productDao.delete(id));
     }

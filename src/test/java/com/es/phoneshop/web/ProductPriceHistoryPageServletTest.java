@@ -43,7 +43,8 @@ public class ProductPriceHistoryPageServletTest {
         Product product = TestUtils.getProduct();
         when(request.getPathInfo()).thenReturn("/1");
         when(productService.getProduct(1L)).thenReturn(product);
-        doNothing().when(request).setAttribute(AppConstants.RequestAttributes.PRICE_HISTORY_ATTRIBUTE, product.getPriceHistory());
+        doNothing().when(request).setAttribute(AppConstants.RequestAttributes.PRICE_HISTORY_ATTRIBUTE,
+                product.getPriceHistory());
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
 
         servlet.doGet(request, response);

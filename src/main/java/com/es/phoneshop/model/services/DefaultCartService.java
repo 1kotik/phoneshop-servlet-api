@@ -63,6 +63,11 @@ public class DefaultCartService implements CartService {
         }
     }
 
+    @Override
+    public void clearCart(Cart cart) {
+        cart.getItems().clear();
+    }
+
     private void addItemIfAlreadyInCart(Cart cart, CartItem item, int quantity) {
         if (item.getQuantity() + quantity <= item.getProduct().getStock()) {
             item.setQuantity(item.getQuantity() + quantity);

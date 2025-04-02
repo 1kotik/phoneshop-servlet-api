@@ -7,8 +7,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 
-public class Product implements Cloneable, Serializable {
-    private Long id;
+public class Product extends GenericEntity implements Cloneable, Serializable {
     private String code;
     private String description;
     /**
@@ -26,7 +25,8 @@ public class Product implements Cloneable, Serializable {
     public Product() {
     }
 
-    public Product(Long id, String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl, List<PriceRecord> priceHistory) {
+    public Product(Long id, String code, String description, BigDecimal price, Currency currency, int stock,
+                   String imageUrl, List<PriceRecord> priceHistory) {
         this.id = id;
         this.code = code;
         this.description = description;
@@ -37,7 +37,8 @@ public class Product implements Cloneable, Serializable {
         this.priceHistory = priceHistory;
     }
 
-    public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl, List<PriceRecord> priceHistory) {
+    public Product(String code, String description, BigDecimal price, Currency currency, int stock,
+                   String imageUrl, List<PriceRecord> priceHistory) {
         this.code = code;
         this.description = description;
         this.price = price;
@@ -45,14 +46,6 @@ public class Product implements Cloneable, Serializable {
         this.stock = stock;
         this.imageUrl = imageUrl;
         this.priceHistory = priceHistory;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCode() {
@@ -138,14 +131,10 @@ public class Product implements Cloneable, Serializable {
     @Override
     public Product clone() {
         Product clone;
-        try {
-            clone = (Product) super.clone();
-            clone.priceHistory = new ArrayList<>(priceHistory.stream()
-                    .map(PriceRecord::clone)
-                    .toList());
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
+        clone = (Product) super.clone();
+        clone.priceHistory = new ArrayList<>(priceHistory.stream()
+                .map(PriceRecord::clone)
+                .toList());
+        return clone;
     }
 }
