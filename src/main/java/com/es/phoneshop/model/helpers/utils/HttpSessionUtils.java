@@ -1,6 +1,7 @@
 package com.es.phoneshop.model.helpers.utils;
 
 import com.es.phoneshop.model.model.Cart;
+import com.es.phoneshop.model.model.Order;
 import com.es.phoneshop.model.model.Product;
 import jakarta.servlet.http.HttpSession;
 
@@ -13,6 +14,7 @@ public final class HttpSessionUtils {
     public static final String RECENTLY_VIEWED_PRODUCTS_SESSION_ATTRIBUTE = Product.class.getName() + ".list";
     public static final String ERROR_MESSAGES_SESSION_ATTRIBUTE = "ErrorMessages.map";
     public static final String QUANTITY_VALUES_SESSION_ATTRIBUTE = "QuantityValues.map";
+    public static final String ORDER_SESSION_ATTRIBUTE = Order.class.getName() + ".map";
 
     private HttpSessionUtils() {
     }
@@ -27,7 +29,8 @@ public final class HttpSessionUtils {
     }
 
     public static LinkedList<Product> getRecentlyViewedProductsFromSession(HttpSession httpSession) {
-        LinkedList<Product> products = (LinkedList<Product>) httpSession.getAttribute(RECENTLY_VIEWED_PRODUCTS_SESSION_ATTRIBUTE);
+        LinkedList<Product> products = (LinkedList<Product>) httpSession
+                .getAttribute(RECENTLY_VIEWED_PRODUCTS_SESSION_ATTRIBUTE);
         if (products == null) {
             products = new LinkedList<>();
             httpSession.setAttribute(RECENTLY_VIEWED_PRODUCTS_SESSION_ATTRIBUTE, products);
@@ -35,8 +38,9 @@ public final class HttpSessionUtils {
         return products;
     }
 
-    public static Map<Long, String> getErrorMessagesFromSession(HttpSession httpSession) {
-        Map<Long, String> errorMessages = (Map<Long, String>) httpSession.getAttribute(ERROR_MESSAGES_SESSION_ATTRIBUTE);
+    public static Map<String, String> getErrorMessagesFromSession(HttpSession httpSession) {
+        Map<String, String> errorMessages = (Map<String, String>) httpSession
+                .getAttribute(ERROR_MESSAGES_SESSION_ATTRIBUTE);
         if (errorMessages == null) {
             errorMessages = new HashMap<>();
             httpSession.setAttribute(ERROR_MESSAGES_SESSION_ATTRIBUTE, errorMessages);
@@ -45,11 +49,21 @@ public final class HttpSessionUtils {
     }
 
     public static Map<Long, String> getQuantityValuesFromSession(HttpSession httpSession) {
-        Map<Long, String> quantityValues = (Map<Long, String>) httpSession.getAttribute(QUANTITY_VALUES_SESSION_ATTRIBUTE);
+        Map<Long, String> quantityValues = (Map<Long, String>) httpSession
+                .getAttribute(QUANTITY_VALUES_SESSION_ATTRIBUTE);
         if (quantityValues == null) {
             quantityValues = new HashMap<>();
             httpSession.setAttribute(QUANTITY_VALUES_SESSION_ATTRIBUTE, quantityValues);
         }
         return quantityValues;
+    }
+
+    public static Order getOrderFromSession(HttpSession httpSession) {
+        Order order = (Order) httpSession.getAttribute(ORDER_SESSION_ATTRIBUTE);
+        if (order == null) {
+            order = new Order();
+            httpSession.setAttribute(ORDER_SESSION_ATTRIBUTE, order);
+        }
+        return order;
     }
 }

@@ -21,7 +21,7 @@ public class CartPageServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Cart cart = HttpSessionUtils.getCartFromSession(request.getSession());
-        Map<Long, String> errorMessages = HttpSessionUtils.getErrorMessagesFromSession(request.getSession());
+        Map<String, String> errorMessages = HttpSessionUtils.getErrorMessagesFromSession(request.getSession());
         Map<Long, String> quantityValues = HttpSessionUtils.getQuantityValuesFromSession(request.getSession());
 
         request.setAttribute(AppConstants.RequestAttributes.CART_ATTRIBUTE, cart);

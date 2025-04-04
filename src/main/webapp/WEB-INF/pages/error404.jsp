@@ -6,5 +6,5 @@
 <% response.setStatus(404); %>
 
 <tags:master pageTitle="404 Not Found">
-    <h1>Error 404: Product not found</h1>
+    <h1>Requested page not found</h1>
 </tags:master>

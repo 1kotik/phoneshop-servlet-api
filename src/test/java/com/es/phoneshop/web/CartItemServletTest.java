@@ -11,7 +11,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -106,7 +105,8 @@ public class CartItemServletTest {
         servlet.doDelete(request, response);
 
         verify(cartService).deleteItem(cart, 1L);
-        verify(response).sendRedirect(request.getContextPath() + "/cart?message=" + AppConstants.Messages.ITEM_DELETE_SUCCESS_MESSAGE);
+        verify(response).sendRedirect(request.getContextPath() + "/cart?message=" +
+                AppConstants.Messages.ITEM_DELETE_SUCCESS_MESSAGE);
     }
 
     @Test

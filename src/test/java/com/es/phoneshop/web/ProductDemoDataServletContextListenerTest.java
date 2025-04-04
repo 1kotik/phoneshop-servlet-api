@@ -32,7 +32,8 @@ public class ProductDemoDataServletContextListenerTest {
     private ServletContext context;
 
     @InjectMocks
-    private ProductDemoDataServletContextListener productDemoDataServletContextListener = new ProductDemoDataServletContextListener();
+    private ProductDemoDataServletContextListener productDemoDataServletContextListener
+            = new ProductDemoDataServletContextListener();
 
     @Test
     public void shouldEnableDemoDataForContextInitialized() {

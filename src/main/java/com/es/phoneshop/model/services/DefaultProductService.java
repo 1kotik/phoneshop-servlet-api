@@ -1,8 +1,8 @@
 package com.es.phoneshop.model.services;
 
+import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.dao.ArrayListProductDao;
-import com.es.phoneshop.model.dao.ProductDao;
 import com.es.phoneshop.model.helpers.enums.SortCriteria;
 import com.es.phoneshop.model.helpers.enums.SortOrder;
 
@@ -14,7 +14,7 @@ public class DefaultProductService implements ProductService {
     private ProductDao productDao;
     private static DefaultProductService productService;
 
-    private DefaultProductService(ProductDao productDao) {
+    private DefaultProductService(ArrayListProductDao productDao) {
         this.productDao = productDao;
     }
 
@@ -39,7 +39,7 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public Product getProduct(Long id) {
-        return productDao.getProduct(id).orElseThrow();
+        return productDao.getById(id).orElseThrow();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class DefaultProductService implements ProductService {
         recentlyViewedProducts.addFirst(product);
     }
 
-    private void removeLastFromRecentlyViewedProducts(LinkedList<Product> recentlyViewedProducts){
+    private void removeLastFromRecentlyViewedProducts(LinkedList<Product> recentlyViewedProducts) {
         if (recentlyViewedProducts.size() == RECENTLY_VIEWED_PRODUCTS_LIST_SIZE) {
             recentlyViewedProducts.removeLast();
         }

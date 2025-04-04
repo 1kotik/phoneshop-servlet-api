@@ -16,7 +16,8 @@ public class ProductDemoDataServletContextListener implements ServletContextList
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        if (Boolean.parseBoolean(event.getServletContext().getInitParameter(AppConstants.Parameters.PRODUCT_DEMO_DATA_ENABLED))) {
+        if (Boolean.parseBoolean(event.getServletContext()
+                .getInitParameter(AppConstants.Parameters.PRODUCT_DEMO_DATA_ENABLED))) {
             ProductUtils.getSampleProducts().forEach(product -> productService.save(product));
         }
     }

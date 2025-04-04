@@ -48,7 +48,8 @@
                     <img class="product-tile" src="${product.imageUrl}">
                 </td>
                 <td>
-                    <a href="${pageContext.servletContext.contextPath}/products/${product.id}">${product.description}</a>
+                    <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
+                            ${product.description}</a>
                 </td>
                 <form method="post" action="${pageContext.servletContext.contextPath}/cart/modify-cart/${product.id}">
                     <td>

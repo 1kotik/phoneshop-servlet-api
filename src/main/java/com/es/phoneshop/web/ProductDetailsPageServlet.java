@@ -24,10 +24,12 @@ public class ProductDetailsPageServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         Long productId = parseProductId(request);
         Product product = productService.getProduct(productId);
-        LinkedList<Product> recentlyViewedProducts = HttpSessionUtils.getRecentlyViewedProductsFromSession(request.getSession());
+        LinkedList<Product> recentlyViewedProducts = HttpSessionUtils
+                .getRecentlyViewedProductsFromSession(request.getSession());
 
         productService.updateRecentlyViewedProducts(recentlyViewedProducts, product);
         request.setAttribute(AppConstants.RequestAttributes.PRODUCT_ATTRIBUTE, product);

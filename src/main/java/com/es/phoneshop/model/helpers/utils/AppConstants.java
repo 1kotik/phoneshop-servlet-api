@@ -13,6 +13,8 @@ public final class AppConstants {
         public static final String PRODUCT_DETAILS_JSP = "/WEB-INF/pages/productDetails.jsp";
         public static final String PRODUCT_LIST_JSP = "/WEB-INF/pages/productList.jsp";
         public static final String PRODUCT_PRICE_HISTORY_JSP = "/WEB-INF/pages/productPriceHistory.jsp";
+        public static final String CHECKOUT_JSP = "/WEB-INF/pages/checkout.jsp";
+        public static final String OVERVIEW_JSP = "/WEB-INF/pages/overview.jsp";
     }
 
     public static class RequestAttributes {
@@ -26,6 +28,7 @@ public final class AppConstants {
         public static final String QUANTITY_VALUES_ATTRIBUTE = "quantityValues";
         public static final String RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE = "recentlyViewedProducts";
         public static final String PRICE_HISTORY_ATTRIBUTE = "priceHistory";
+        public static final String ORDER_ATTRIBUTE = "order";
     }
 
     public static class Parameters {
@@ -38,6 +41,12 @@ public final class AppConstants {
         public static final String QUERY_PARAMETER = "query";
         public static final String PRODUCT_ID_PARAMETER = "productId";
         public static final String PRODUCT_DEMO_DATA_ENABLED = "productDemoDataEnabled";
+        public static final String FIRST_NAME_PARAMETER = "firstName";
+        public static final String LAST_NAME_PARAMETER = "lastName";
+        public static final String PHONE_PARAMETER = "phone";
+        public static final String DELIVERY_ADDRESS_PARAMETER = "deliveryAddress";
+        public static final String DELIVERY_DATE_PARAMETER = "deliveryDate";
+        public static final String PAYMENT_METHOD_PARAMETER = "paymentMethod";
     }
 
     public static class Messages {
@@ -50,5 +59,10 @@ public final class AppConstants {
         public static final String INVALID_QUANTITY_MESSAGE = "Invalid quantity";
         public static final String PRODUCT_ADD_SUCCESS_MESSAGE = "Product is added to the cart!";
         public static final String EMPTY_MESSAGE = "";
+        public static final String INVALID_PARAMETER_MESSAGE = "Parameter should not be empty";
+        public static final String INVALID_DATE_MESSAGE = "Date should be in the format DD.MM.YYYY";
+        public static final String INVALID_PAYMENT_METHOD_MESSAGE = "Select a payment method";
+        public static final String ORDER_SAVE_SUCCESS_MESSAGE = "Order is saved successfully";
+        public static final String ORDER_SAVE_ERROR_MESSAGE = "Error occurred while saving order";
     }
 }

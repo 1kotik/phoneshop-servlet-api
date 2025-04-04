@@ -45,7 +45,7 @@ public class CartItemServlet extends HttpServlet {
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String[] productIds = request.getParameterValues(AppConstants.Parameters.PRODUCT_ID_PARAMETER);
         String[] quantities = request.getParameterValues(AppConstants.Parameters.QUANTITY_PARAMETER);
-        Map<Long, String> errorMessages = HttpSessionUtils.getErrorMessagesFromSession(request.getSession());
+        Map<String, String> errorMessages = HttpSessionUtils.getErrorMessagesFromSession(request.getSession());
 
         IntStream.range(0, productIds.length).forEach(i -> updateCartItem(request, productIds[i], quantities[i]));
 
@@ -55,10 +55,11 @@ public class CartItemServlet extends HttpServlet {
     }
 
     @Override
-    public void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Long productId = parseProductIdFromPathInfo(request);
         cartService.deleteItem(HttpSessionUtils.getCartFromSession(request.getSession()), productId);
-        response.sendRedirect(request.getContextPath() + "/cart?message=" + AppConstants.Messages.ITEM_DELETE_SUCCESS_MESSAGE);
+        response.sendRedirect(request.getContextPath() + "/cart?message=" +
+                AppConstants.Messages.ITEM_DELETE_SUCCESS_MESSAGE);
     }
 
     private Long parseProductIdFromPathInfo(HttpServletRequest request) {
@@ -88,7 +89,7 @@ public class CartItemServlet extends HttpServlet {
 
     private void updateCartItem(HttpServletRequest request, String stringProductId, String stringQuantity) {
         Cart cart = HttpSessionUtils.getCartFromSession(request.getSession());
-        Map<Long, String> errorMessages = HttpSessionUtils.getErrorMessagesFromSession(request.getSession());
+        Map<String, String> errorMessages = HttpSessionUtils.getErrorMessagesFromSession(request.getSession());
         Map<Long, String> quantityValues = HttpSessionUtils.getQuantityValuesFromSession(request.getSession());
         Long productId = Long.parseLong(stringProductId);
 
@@ -98,9 +99,9 @@ public class CartItemServlet extends HttpServlet {
             int quantity = parseQuantity(stringQuantity, request);
             cartService.updateItem(cart, productId, quantity);
         } catch (ParseException e) {
-            errorMessages.put(productId, AppConstants.Messages.INVALID_QUANTITY_MESSAGE);
+            errorMessages.put(productId.toString(), AppConstants.Messages.INVALID_QUANTITY_MESSAGE);
         } catch (ProductOutOfStockException e) {
-            errorMessages.put(productId, e.getMessage());
+            errorMessages.put(productId.toString(), e.getMessage());
         }
     }
 

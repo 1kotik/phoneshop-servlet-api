@@ -1,6 +1,6 @@
 package com.es.phoneshop.model.services;
 
-import com.es.phoneshop.model.dao.ProductDao;
+import com.es.phoneshop.model.dao.ArrayListProductDao;
 import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.helpers.enums.SortCriteria;
 import com.es.phoneshop.model.helpers.enums.SortOrder;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class DefaultProductServiceTest {
     @Mock
-    private ProductDao productDao;
+    private ArrayListProductDao productDao;
 
     @InjectMocks
     private DefaultProductService productService;
@@ -44,7 +44,8 @@ public class DefaultProductServiceTest {
 
         assertEquals(result.size(), TestUtils.getSampleProducts().size());
         verify(productDao).findProducts(query == null ? "" : query,
-                sortCriteria == null ? SortCriteria.QUERY_MATCH_NUMBER : SortCriteria.valueOf(sortCriteria.toUpperCase()),
+                sortCriteria == null ? SortCriteria.QUERY_MATCH_NUMBER :
+                        SortCriteria.valueOf(sortCriteria.toUpperCase()),
                 sortOrder == null ? SortOrder.ASC : SortOrder.valueOf(sortOrder.toUpperCase()));
     }
 
@@ -57,7 +58,7 @@ public class DefaultProductServiceTest {
 
     @Test
     public void shouldGetProduct() {
-        when(productDao.getProduct(1L)).thenReturn(Optional.of(TestUtils.getProduct()));
+        when(productDao.getById(1L)).thenReturn(Optional.of(TestUtils.getProduct()));
 
         Product result = productService.getProduct(1L);
 
@@ -66,7 +67,7 @@ public class DefaultProductServiceTest {
 
     @Test
     public void shouldThrowNoSuchElementExceptionForGetProduct() {
-        when(productDao.getProduct(1L)).thenReturn(Optional.empty());
+        when(productDao.getById(1L)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> productService.getProduct(1L));
     }

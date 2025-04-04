@@ -5,10 +5,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cart implements Serializable {
-    private List<CartItem> items;
-    private int totalQuantity;
-    private BigDecimal totalPrice;
+public class Cart extends GenericEntity implements Serializable, Cloneable {
+    protected List<CartItem> items;
+    protected int totalQuantity;
+    protected BigDecimal totalPrice;
 
     public Cart() {
         items = new ArrayList<>();
@@ -16,6 +16,10 @@ public class Cart implements Serializable {
 
     public Cart(List<CartItem> items) {
         this.items = new ArrayList<>(items);
+    }
+
+    public void setItems(List<CartItem> items) {
+        this.items = items;
     }
 
     public List<CartItem> getItems() {
@@ -36,5 +40,15 @@ public class Cart implements Serializable {
 
     public int getTotalQuantity() {
         return totalQuantity;
+    }
+
+
+    @Override
+    public Cart clone() {
+        Cart clone;
+        clone = (Cart) super.clone();
+        clone.items = this.items.stream()
+                .map(CartItem::clone).toList();
+        return clone;
     }
 }
