@@ -22,13 +22,16 @@ public class ProductListPageServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String query = request.getParameter(AppConstants.Parameters.QUERY_PARAMETER);
         String sortCriteria = request.getParameter(AppConstants.Parameters.SORT_CRITERIA_PARAMETER);
         String sortOrder = request.getParameter(AppConstants.Parameters.ORDER_PARAMETER);
 
-        request.setAttribute(AppConstants.RequestAttributes.RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE, HttpSessionUtils.getRecentlyViewedProductsFromSession(request.getSession()));
-        request.setAttribute(AppConstants.RequestAttributes.PRODUCTS_ATTRIBUTE, productService.findProducts(query, sortCriteria, sortOrder));
+        request.setAttribute(AppConstants.RequestAttributes.RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE,
+                HttpSessionUtils.getRecentlyViewedProductsFromSession(request.getSession()));
+        request.setAttribute(AppConstants.RequestAttributes.PRODUCTS_ATTRIBUTE,
+                productService.findProducts(query, sortCriteria, sortOrder));
         request.getRequestDispatcher(AppConstants.JspFilePaths.PRODUCT_LIST_JSP).forward(request, response);
     }
 

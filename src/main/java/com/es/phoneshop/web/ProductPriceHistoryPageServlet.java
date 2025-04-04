@@ -21,9 +21,11 @@ public class ProductPriceHistoryPageServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         Long productId = Long.parseLong(request.getPathInfo().substring(1));
-        request.setAttribute(AppConstants.RequestAttributes.PRICE_HISTORY_ATTRIBUTE, productService.getProduct(productId).getPriceHistory());
+        request.setAttribute(AppConstants.RequestAttributes.PRICE_HISTORY_ATTRIBUTE,
+                productService.getProduct(productId).getPriceHistory());
         request.getRequestDispatcher(AppConstants.JspFilePaths.PRODUCT_PRICE_HISTORY_JSP).forward(request, response);
     }
 }

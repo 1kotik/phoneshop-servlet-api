@@ -6,5 +6,6 @@
 
 <c:if test="${not empty cart.items}">
     Cart: ${cart.totalQuantity} items, total <fmt:formatNumber value="${cart.totalPrice}" type="currency"
-                                                               currencySymbol="${cart.items.get(0).product.currency.symbol}"/>
+                                                               currencySymbol="${cart.items.get(0)
+                                                               .product.currency.symbol}"/>
 </c:if>
