@@ -110,6 +110,17 @@
         <url-pattern>/overview/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>productReview</servlet-name>
+        <servlet-class>com.es.phoneshop.web.ProductReviewServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>productReview</servlet-name>
+        <url-pattern>/product-review/*</url-pattern>
+    </servlet-mapping>
+
+
     <listener>
         <listener-class>com.es.phoneshop.web.ProductDemoDataServletContextListener</listener-class>
     </listener>

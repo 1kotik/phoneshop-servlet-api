@@ -15,7 +15,7 @@ import java.util.Currency;
 import java.util.List;
 
 public class TestUtils {
-    private final static String imageDirectory
+    private static final String imageDirectory
             = "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/";
 
     public static List<Product> getSampleProducts() {

@@ -22,6 +22,7 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
         comparators.put(SortCriteria.DESCRIPTION, Comparator.comparing(Product::getDescription));
         comparators.put(SortCriteria.PRICE, Comparator.comparing(Product::getPrice));
         comparators.put(SortCriteria.QUERY_MATCH_NUMBER, new ProductDescriptionComparator());
+        comparators.put(SortCriteria.AVERAGE_RATING, Comparator.comparing(Product::getAverageRating));
     }
 
     public static synchronized ArrayListProductDao getInstance() {
@@ -48,6 +49,12 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
         }
 
         list.removeIf(product -> id.equals(product.getId()));
+    }
+
+    @Override
+    public void updateAverageRating(Long id, double averageRating) {
+        list.stream().filter(product -> id.equals(product.getId()))
+                .forEach(product -> product.setAverageRating(averageRating));
     }
 
     private Comparator<Product> getProductComparator(SortCriteria sortCriteria, SortOrder sortOrder,

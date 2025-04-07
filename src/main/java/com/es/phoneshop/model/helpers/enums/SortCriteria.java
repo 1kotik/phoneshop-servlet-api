@@ -1,5 +1,5 @@
 package com.es.phoneshop.model.helpers.enums;
 
 public enum SortCriteria {
-    DESCRIPTION, PRICE, QUERY_MATCH_NUMBER
+    DESCRIPTION, PRICE, QUERY_MATCH_NUMBER, AVERAGE_RATING
 }

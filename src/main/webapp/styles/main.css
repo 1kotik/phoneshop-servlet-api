@@ -62,3 +62,30 @@ body.product-list {
     width: 50px;
     text-align: right;
 }
+
+.review {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.review-author {
+    color: #333;
+}
+
+.review-rating {
+    color: #ff9800;
+}
+
+.review-text {
+    color: #555;
+    line-height: 1.5;
+}

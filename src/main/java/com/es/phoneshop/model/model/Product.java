@@ -21,6 +21,7 @@ public class Product extends GenericEntity implements Cloneable, Serializable {
     private int stock;
     private String imageUrl;
     private List<PriceRecord> priceHistory;
+    private double averageRating;
 
     public Product() {
     }
@@ -136,5 +137,13 @@ public class Product extends GenericEntity implements Cloneable, Serializable {
                 .map(PriceRecord::clone)
                 .toList());
         return clone;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }
