@@ -5,6 +5,8 @@
 
 <jsp:useBean id="product" type="com.es.phoneshop.model.model.Product" scope="request"/>
 <jsp:useBean id="recentlyViewedProducts" type="java.util.List" scope="request"/>
+<jsp:useBean id="reviews" type="java.util.List" scope="request"/>
+<jsp:useBean id="errors" type="java.util.Map" scope="request"/>
 
 <tags:master pageTitle="Product List">
 
@@ -42,6 +44,10 @@
             <td>Stock</td>
             <td>${product.stock}</td>
         </tr>
+        <tr>
+            <td>Rating</td>
+            <td>${String.format("%.2f", product.averageRating)}</td>
+        </tr>
     </table>
 
     <form method="post" action="${pageContext.servletContext.contextPath}/cart/modify-cart/${product.id}">
@@ -50,6 +56,59 @@
         <input type="hidden" name="_method" value="POST">
         <button>Add to cart</button>
     </form>
+
+    <c:forEach var="review" items="${reviews}">
+        <div class="review">
+            <div class="review-header">
+            <span class="review-author">
+                ${review.customer.firstName} ${review.customer.lastName}
+            </span>
+                <span class="review-rating">
+                Rating: ${review.rating}
+            </span>
+            </div>
+            <div class="review-text">
+                <p>${review.text}</p>
+            </div>
+        </div>
+    </c:forEach>
+
+    <h2>Add review</h2>
+    <form method="post" action="${pageContext.servletContext.contextPath}/product-review/${product.id}">
+        <table>
+            <tags:customerDetailsInput errors="${errors}" parameterName="firstName"
+                                       value="${param['firstName']}" label="First name"/>
+
+            <tags:customerDetailsInput errors="${errors}" parameterName="lastName"
+                                       value="${param['lastName']}" label="Last name"/>
+            <tr>
+                <td>Rating (1-5):</td>
+                <td>
+                    <select name="averageRating" required>
+                        <option value="">Select rating</option>
+                        <option value="1" ${param.rating == '1' ? 'selected' : ''}>1 ★</option>
+                        <option value="2" ${param.rating == '2' ? 'selected' : ''}>2 ★★</option>
+                        <option value="3" ${param.rating == '3' ? 'selected' : ''}>3 ★★★</option>
+                        <option value="4" ${param.rating == '4' ? 'selected' : ''}>4 ★★★★</option>
+                        <option value="5" ${param.rating == '5' ? 'selected' : ''}>5 ★★★★★</option>
+                    </select>
+                    <c:if test="${not empty errors['averageRating']}">
+                        <span class="error">${errors['averageRating']}</span>
+                    </c:if>
+                </td>
+            </tr>
+            <tr>
+                <td>Your review:</td>
+                <td>
+                    <textarea name="productReviewText" rows="4" cols="50">${param.text}</textarea>
+                </td>
+            </tr>
+        </table>
+        <p>
+            <button>Submit</button>
+        </p>
+    </form>
+
     <c:if test="${not empty param.error}">
         ${param.error}
     </c:if>

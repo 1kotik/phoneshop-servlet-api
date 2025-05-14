@@ -10,4 +10,6 @@ public interface ProductDao extends GenericDao<Product> {
     List<Product> findProducts(String query, SortCriteria sortCriteria, SortOrder sortOrder);
 
     void delete(Long id);
+
+    void updateAverageRating(Long id, double averageRating);
 }

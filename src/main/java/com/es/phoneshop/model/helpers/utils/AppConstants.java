@@ -29,6 +29,7 @@ public final class AppConstants {
         public static final String RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE = "recentlyViewedProducts";
         public static final String PRICE_HISTORY_ATTRIBUTE = "priceHistory";
         public static final String ORDER_ATTRIBUTE = "order";
+        public static final String PRODUCT_REVIEWS_ATTRIBUTE = "reviews";
     }
 
     public static class Parameters {
@@ -47,6 +48,8 @@ public final class AppConstants {
         public static final String DELIVERY_ADDRESS_PARAMETER = "deliveryAddress";
         public static final String DELIVERY_DATE_PARAMETER = "deliveryDate";
         public static final String PAYMENT_METHOD_PARAMETER = "paymentMethod";
+        public static final String PRODUCT_RATING_PARAMETER = "averageRating";
+        public static final String PRODUCT_REVIEW_TEXT_PARAMETER = "productReviewText";
     }
 
     public static class Messages {
@@ -64,5 +67,7 @@ public final class AppConstants {
         public static final String INVALID_PAYMENT_METHOD_MESSAGE = "Select a payment method";
         public static final String ORDER_SAVE_SUCCESS_MESSAGE = "Order is saved successfully";
         public static final String ORDER_SAVE_ERROR_MESSAGE = "Error occurred while saving order";
+        public static final String REVIEW_SAVE_SUCCESS_MESSAGE = "Review is saved successfully";
+        public static final String REVIEW_SAVE_ERROR_MESSAGE = "Error occurred while saving review";
     }
 }

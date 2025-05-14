@@ -40,6 +40,10 @@
                 <tags:sortQuery sortCriteria="price" order="asc"/>
                 <tags:sortQuery sortCriteria="price" order="desc"/>
             </td>
+            <td>Rating
+                <tags:sortQuery sortCriteria="average_rating" order="asc"/>
+                <tags:sortQuery sortCriteria="average_rating" order="desc"/>
+            </td>
         </tr>
         </thead>
         <c:forEach var="product" items="${products}">
@@ -60,6 +64,9 @@
                             <fmt:formatNumber value="${product.price}" type="currency"
                                               currencySymbol="${product.currency.symbol}"/>
                         </a>
+                    </td>
+                    <td>
+                        ${String.format("%.2f", product.averageRating)}
                     </td>
                     <td>
                         <button>Add to cart</button>

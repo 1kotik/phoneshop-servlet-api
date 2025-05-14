@@ -1,6 +1,7 @@
 package com.es.phoneshop.model.services;
 
 import com.es.phoneshop.model.dao.ProductDao;
+import com.es.phoneshop.model.dao.ProductReviewDao;
 import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.dao.ArrayListProductDao;
 import com.es.phoneshop.model.helpers.enums.SortCriteria;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 public class DefaultProductService implements ProductService {
     private ProductDao productDao;
+    private ProductReviewDao productReviewDao;
     private static DefaultProductService productService;
 
     private DefaultProductService(ArrayListProductDao productDao) {
@@ -45,6 +47,7 @@ public class DefaultProductService implements ProductService {
     @Override
     public void delete(Long id) {
         productDao.delete(id);
+        productReviewDao.deleteProductReviews(id);
     }
 
     @Override
@@ -55,6 +58,11 @@ public class DefaultProductService implements ProductService {
         sameOptionalProduct.ifPresentOrElse(recentlyViewedProducts::remove,
                 () -> removeLastFromRecentlyViewedProducts(recentlyViewedProducts));
         recentlyViewedProducts.addFirst(product);
+    }
+
+    @Override
+    public void updateAverageRating(Long id, double averageRating) {
+        productDao.updateAverageRating(id, averageRating);
     }
 
     private void removeLastFromRecentlyViewedProducts(LinkedList<Product> recentlyViewedProducts) {
