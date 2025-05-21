@@ -1,11 +1,13 @@
 package com.es.phoneshop.model.services;
 
 import com.es.phoneshop.model.dao.ProductDao;
+import com.es.phoneshop.model.helpers.enums.SearchMethod;
 import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.dao.ArrayListProductDao;
 import com.es.phoneshop.model.helpers.enums.SortCriteria;
 import com.es.phoneshop.model.helpers.enums.SortOrder;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -55,6 +57,18 @@ public class DefaultProductService implements ProductService {
         sameOptionalProduct.ifPresentOrElse(recentlyViewedProducts::remove,
                 () -> removeLastFromRecentlyViewedProducts(recentlyViewedProducts));
         recentlyViewedProducts.addFirst(product);
+    }
+
+    @Override
+    public List<Product> findProductsByAdvancedSearch(String query, SearchMethod searchMethod,
+                                                      double minPrice, double maxPrice) {
+        return productDao.findProductsByAdvancedSearch(query, searchMethod,
+                BigDecimal.valueOf(minPrice), BigDecimal.valueOf(maxPrice));
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productDao.getAllProducts();
     }
 
     private void removeLastFromRecentlyViewedProducts(LinkedList<Product> recentlyViewedProducts) {

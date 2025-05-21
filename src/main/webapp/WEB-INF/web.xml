@@ -110,6 +110,16 @@
         <url-pattern>/overview/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>advancedSearch</servlet-name>
+        <servlet-class>com.es.phoneshop.web.AdvancedSearchPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>advancedSearch</servlet-name>
+        <url-pattern>/advanced-search</url-pattern>
+    </servlet-mapping>
+
     <listener>
         <listener-class>com.es.phoneshop.web.ProductDemoDataServletContextListener</listener-class>
     </listener>

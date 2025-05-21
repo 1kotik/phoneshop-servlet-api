@@ -1,5 +1,6 @@
 package com.es.phoneshop.model.services;
 
+import com.es.phoneshop.model.helpers.enums.SearchMethod;
 import com.es.phoneshop.model.model.Product;
 
 import java.util.LinkedList;
@@ -13,4 +14,7 @@ public interface ProductService {
     Product getProduct(Long id);
     void delete(Long id);
     void updateRecentlyViewedProducts(LinkedList<Product> recentlyViewedProducts, Product product);
+    List<Product> findProductsByAdvancedSearch(String query, SearchMethod searchMethod,
+                                               double minPrice, double maxPrice);
+    List<Product> getAllProducts();
 }

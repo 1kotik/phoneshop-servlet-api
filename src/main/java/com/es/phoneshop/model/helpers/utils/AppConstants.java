@@ -15,6 +15,7 @@ public final class AppConstants {
         public static final String PRODUCT_PRICE_HISTORY_JSP = "/WEB-INF/pages/productPriceHistory.jsp";
         public static final String CHECKOUT_JSP = "/WEB-INF/pages/checkout.jsp";
         public static final String OVERVIEW_JSP = "/WEB-INF/pages/overview.jsp";
+        public static final String ADVANCED_SEARCH_JSP = "/WEB-INF/pages/advancedSearch.jsp";
     }
 
     public static class RequestAttributes {
@@ -47,6 +48,9 @@ public final class AppConstants {
         public static final String DELIVERY_ADDRESS_PARAMETER = "deliveryAddress";
         public static final String DELIVERY_DATE_PARAMETER = "deliveryDate";
         public static final String PAYMENT_METHOD_PARAMETER = "paymentMethod";
+        public static final String SEARCH_METHOD_PARAMETER = "searchMethod";
+        public static final String MIN_PRICE_PARAMETER = "minPrice";
+        public static final String MAX_PRICE_PARAMETER = "maxPrice";
     }
 
     public static class Messages {
@@ -64,5 +68,6 @@ public final class AppConstants {
         public static final String INVALID_PAYMENT_METHOD_MESSAGE = "Select a payment method";
         public static final String ORDER_SAVE_SUCCESS_MESSAGE = "Order is saved successfully";
         public static final String ORDER_SAVE_ERROR_MESSAGE = "Error occurred while saving order";
+        public static final String NOT_A_NUMBER_ERROR_MESSAGE = "Not a number";
     }
 }

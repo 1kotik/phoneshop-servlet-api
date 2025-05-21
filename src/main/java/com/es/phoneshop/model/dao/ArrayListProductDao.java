@@ -1,11 +1,13 @@
 package com.es.phoneshop.model.dao;
 
+import com.es.phoneshop.model.helpers.enums.SearchMethod;
 import com.es.phoneshop.model.model.Product;
 import com.es.phoneshop.model.helpers.comparators.ProductDescriptionComparator;
 import com.es.phoneshop.model.helpers.utils.ProductQueryUtils;
 import com.es.phoneshop.model.helpers.enums.SortCriteria;
 import com.es.phoneshop.model.helpers.enums.SortOrder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -33,7 +35,7 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
 
     @Override
     public synchronized List<Product> findProducts(String query, SortCriteria sortCriteria, SortOrder sortOrder) {
-        String[] queryParts = query.trim().replaceAll(" +", " ").toLowerCase().split(" ");
+        String[] queryParts = ProductQueryUtils.getQueryParts(query);
         return new ArrayList<>(list.stream()
                 .filter(product -> ProductQueryUtils.getQueryMatchNumber(product.getDescription(), queryParts) != 0)
                 .sorted(getProductComparator(sortCriteria, sortOrder, queryParts))
@@ -48,6 +50,25 @@ public class ArrayListProductDao extends ArrayListGenericDao<Product> implements
         }
 
         list.removeIf(product -> id.equals(product.getId()));
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return list.stream()
+                .map(Product::clone)
+                .toList();
+    }
+
+    @Override
+    public List<Product> findProductsByAdvancedSearch(String query, SearchMethod searchMethod,
+                                                      BigDecimal minPrice, BigDecimal maxPrice) {
+        String[] queryParts = ProductQueryUtils.getQueryParts(query);
+        return list.stream()
+                .filter(product ->ProductQueryUtils.isInPriceRange(product.getPrice(), minPrice, maxPrice))
+                .filter(product -> ProductQueryUtils
+                        .isSuitableForSearchMethod(product.getDescription(), queryParts, searchMethod))
+                .map(Product::clone)
+                .toList();
     }
 
     private Comparator<Product> getProductComparator(SortCriteria sortCriteria, SortOrder sortOrder,

@@ -22,6 +22,9 @@
     <a href="${pageContext.servletContext.contextPath}/cart">
         <p>Go to cart</p>
     </a>
+    <a href="${pageContext.servletContext.contextPath}/advanced-search">
+        <p>Advanced search</p>
+    </a>
 
     <form id="searchForm">
         <input name="query" value="${param.query}">
