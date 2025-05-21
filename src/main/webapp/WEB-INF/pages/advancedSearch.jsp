@@ -57,7 +57,6 @@
             <tr>
                 <td>Image</td>
                 <td>Description</td>
-                <td>Quantity</td>
                 <td class="price">Price</td>
             </tr>
             </thead>
@@ -70,22 +69,12 @@
                         <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
                                 ${product.description}</a>
                     </td>
-                    <form method="post"
-                          action="${pageContext.servletContext.contextPath}/cart/modify-cart/${product.id}">
-                        <td>
-                            <input class="quantity-input" name="quantity" value="1">
-                        </td>
                         <td class="price">
                             <a href="${pageContext.servletContext.contextPath}/products/price-history/${product.id}">
                                 <fmt:formatNumber value="${product.price}" type="currency"
                                                   currencySymbol="${product.currency.symbol}"/>
                             </a>
                         </td>
-                        <td>
-                            <button>Add to cart</button>
-                        </td>
-                        <input type="hidden" name="_method" value="POST">
-                    </form>
                 </tr>
             </c:forEach>
         </table>
